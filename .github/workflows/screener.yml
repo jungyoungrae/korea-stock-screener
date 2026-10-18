@@ -1,3 +1,29 @@
+
+name: Daily Korea Stock Screener
+
+on:
+  workflow_dispatch:
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Test October 16
+        run: |
+          mkdir -p output
+          python screener.py --date 2026-10-16 --market ALL --output output/results.csv
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stock-results
+          path: output/
+          if-no-files-found: warn
 .github/workflows/screener.yml
 
 
