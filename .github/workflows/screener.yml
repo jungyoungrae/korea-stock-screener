@@ -1,0 +1,65 @@
+.github/workflows/screener.yml
+
+
+name: Daily Korea Stock Screener
+
+
+on:
+
+workflow_dispatch:
+
+inputs:
+
+date:
+
+description: 'Historical date YYYY-MM-DD'
+
+required: false
+
+type: string
+
+schedule:
+
+- cron: '30 12 * * 1-5'
+
+
+permissions:
+
+contents: read
+
+
+jobs:
+
+screen:
+
+runs-on: ubuntu-latest
+
+timeout-minutes: 300
+
+steps:
+
+- uses: actions/checkout@v4
+
+- uses: actions/setup-python@v5
+
+with:
+
+python-version: '3.11'
+
+cache: pip
+
+- run: pip install -r requirements.txt
+
+- name: Run screen
+
+env:
+
+TARGET_DATE: TARGET_DATE" ]; then
+
+python screener.py --date "{{ github.run_number }}
+
+path: output/
+
+if-no-files-found: warn
+
+retention-days: 30
