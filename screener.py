@@ -29,12 +29,9 @@ def main():
     target = pd.Timestamp(args.date)
     end = target.strftime('%Y%m%d')
     start = (target - pd.Timedelta(days=450)).strftime('%Y%m%d')
-    benchmark = stock.get_index_ohlcv_by_date(start, end, '1028')  # KOSPI 200
+    benchmark = stock.get_index_ohlcv_by_date(start, end, '1028', name_display=False)benchmark = stock.get_index_ohlcv_by_date(start, end, '1028')  # KOSPI 200
     if benchmark is None or benchmark.empty or target not in benchmark.index:
         raise RuntimeError('KOSPI200 기준일 데이터가 없습니다. 거래일 또는 데이터 공급 상태를 확인하세요.')
-    benchmark = benchmark.sort_index()
-    if len(benchmark.loc[:target]) < 21:
-        raise RuntimeError('KOSPI200 20거래일 비교 데이터 부족')
     bm_return = float(benchmark.loc[target, '종가'] / benchmark.loc[:target, '종가'].iloc[-21] - 1)
     markets = ['KOSPI','KOSDAQ'] if args.market == 'ALL' else [args.market]
     tickers = sorted(set(sum((stock.get_market_ticker_list(end, market=m) for m in markets), [])))
